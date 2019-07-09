@@ -11,12 +11,27 @@ class GameState(var positions: List[Coord] = null, var play: Boolean = true) {
     val request = new InputRequest()
     var count = request.itemNum
     for (i <- 1 to count) {
-      positionsTemp += new Coord((-4 - count) + Random.nextInt(9 + count), (-4 - count) + Random.nextInt(9 + count))
+      breakable {
+        while (true) {
+          var randCoord = new Coord((-4 - count) + Random.nextInt(9 + count), (-4 - count) + Random.nextInt(9 + count))
+          var equality = false
+          for (pos <- positionsTemp) {
+            if (pos.equals(randCoord)) {
+              println("Boop")
+              equality = true
+            }
+          }
+          if (!equality) {
+            positionsTemp += randCoord
+            break
+          }
+        }
+      }
     }
     positions = positionsTemp.toList
     println("You wake up in a foggy swamp \n" +
       "In your pocket you find a strange watch with a number on it")
-    println(f"The number on the watch is ${Compass.distance(positions)}%2.2f metres")
+    Compass.distanceText(positions)
     println("You need to find an exit")
   }
 
@@ -32,7 +47,7 @@ class GameState(var positions: List[Coord] = null, var play: Boolean = true) {
   }
 
   def unlucky(): Unit = {
-    println("You found a rock, boring")
+    println("You found a rock, the number on the watch has changed")
     positions = positions.patch(positions.tail.indexOf(positions(0)), Nil, 1)
   }
 }

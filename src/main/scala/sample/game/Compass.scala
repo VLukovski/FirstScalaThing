@@ -10,4 +10,7 @@ object Compass {
     }
     distances.toList.min
   }
+  def distanceText(positions: List[Coord]): Unit ={
+    println(f"The number on the watch is ${distance(positions)}%2.2f metres")
+  }
 }
